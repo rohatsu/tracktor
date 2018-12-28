@@ -2,7 +2,8 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpClientXsrfModule } from "@angular/common/http";
 import { Subscription } from "rxjs";
-import * as $ from 'jquery';
+/*import * as $ from 'jquery';*/
+import $ = require('jquery');
 import * as bootbox from 'bootbox';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { SummaryModel, WebModel, StatusModel, EditModel, ReportModel, EntriesModel, ProjectModel } from "./app.models";

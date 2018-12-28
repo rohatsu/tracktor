@@ -3,6 +3,10 @@
 ###############################################################################
 * text=auto
 
+tracktor.web/Scripts/*.js linguist-vendored
+tracktor.web/Scripts/typings/* linguist-vendored
+tracktor.web/Content/bootstrap*.* linguist-vendored
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #

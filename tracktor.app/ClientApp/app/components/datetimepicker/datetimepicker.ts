@@ -9,7 +9,7 @@ import {
     OnChanges,
     SimpleChanges
 } from '@angular/core';
-import * as $ from 'jquery';
+import $ = require('jquery');
 import { SetOptions } from 'eonasdan-bootstrap-datetimepicker';
 import * as moment from 'moment';
 require('eonasdan-bootstrap-datetimepicker');

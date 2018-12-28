@@ -1,6 +1,6 @@
 import { Component, AfterViewChecked } from '@angular/core';
 import { AppService } from '../../app.service';
-import * as $ from 'jquery';
+import $ = require('jquery');
 
 @Component({
     selector: '[tracktor-user]',

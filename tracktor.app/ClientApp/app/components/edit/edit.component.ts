@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { AppService } from '../../app.service';
-import * as $ from 'jquery';
+import $ = require('jquery');
 import * as moment from 'moment';
 
 @Component({
