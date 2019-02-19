@@ -70,7 +70,7 @@ namespace tracktor.app.Controllers
                 webReport.Report.Add(currentWeek);
             }
 
-            foreach (var project in summaryModel.Projects.Where(p => projectID == 0 || p.TProjectID == projectID))
+            foreach (var project in summaryModel.Projects.Where(p => projectID == 0 || p.TProjectID == projectID).OrderBy(p => p.IsObsolete).ThenBy(p => p.DisplayOrder).ThenBy(p => p.TProjectID))
             {
                 var projectContrib = new WebReportProjectContrib
                 {
@@ -78,7 +78,7 @@ namespace tracktor.app.Controllers
                     TaskContribs = new List<WebReportTaskContrib>(),
                     Contrib = 0
                 };
-                foreach (var task in project.TTasks.Where(t => taskID == 0 || t.TTaskID == taskID))
+                foreach (var task in project.TTasks.Where(t => taskID == 0 || t.TTaskID == taskID).OrderBy(t => t.IsObsolete).ThenBy(t => t.DisplayOrder).ThenBy(t => t.TTaskID))
                 {
                     var taskContrib = new WebReportTaskContrib
                     {

@@ -14,7 +14,7 @@ Modern UI (tracktor.app):
 * Angular 4.3.4 SPA
 * TypeScript 2.4
 * jQuery 3.2.1
-* Bootstrap 4 (+ plugins)
+* Bootstrap 3 (+ plugins)
 * Webpack
 
 Legacy UI (tracktor.web):

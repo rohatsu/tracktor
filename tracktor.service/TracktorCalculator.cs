@@ -175,8 +175,12 @@ namespace tracktor.service
 
             var model = new TSummaryModelDto
             {
-                Projects = _db.TProjects.Where(p => p.TUserID == mContext.TUserID).ToList().Select(p => Mapper.Map<TProjectDto>(p)).ToList()
+                Projects = _db.TProjects.Where(p => p.TUserID == mContext.TUserID).OrderBy(p => p.IsObsolete).ThenBy(p => p.DisplayOrder).ThenBy(p => p.DisplayOrder).ToList().Select(p => Mapper.Map<TProjectDto>(p)).ToList()
             };
+            foreach(var p in model.Projects)
+            {
+                p.TTasks = p.TTasks.OrderBy(t => t.IsObsolete).ThenBy(t => t.DisplayOrder).ThenBy(t => t.TTaskID).ToList();
+            }
 
             var taskToProject = model.Projects.SelectMany(p => p.TTasks.Select(t => new KeyValuePair<int, int>(t.TTaskID, t.TProjectID))).ToDictionary(t => t.Key, p => p.Value);
             List<TEntry> entries = GetEntries(startDate, endDate, 0, 0);
