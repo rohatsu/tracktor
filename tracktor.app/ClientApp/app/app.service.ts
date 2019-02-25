@@ -123,6 +123,12 @@ export class AppService {
             if (data.entriesModel) { this.entriesModel = data.entriesModel };
             this.unrealizedContrib = 0;
             this.modelRefreshTime = new Date();
+            if (this.statusModel != undefined && this.statusModel.inProgress && this.statusModel.latestEntry != undefined) {
+                document.title = "tracktor / " + this.statusModel.latestEntry.projectName;
+            }
+            else {
+                document.title = "tracktor";
+            }
         }
     }
 
