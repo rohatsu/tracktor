@@ -6,13 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using tracktor.service;
 
 namespace tracktor.app.Models
 {
-    public class TEditModelDto
+    /*public class TEditModelDto
     {
         public TEntryDto Entry { get; set; }
-    }
+    }*/
 
     public class TracktorWebModel
     {

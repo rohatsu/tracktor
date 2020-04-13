@@ -15,6 +15,7 @@ using tracktor.app.Models;
 using System.Threading.Tasks;
 using tracktor.app;
 using Microsoft.AspNetCore.Identity;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -28,12 +29,12 @@ namespace tracktor.app.Controllers
         }
 
         [HttpGet]
-        public async Task<TracktorWebModel> Get([FromQuery]int year, [FromQuery]int month, [FromQuery]int projectID, [FromQuery]int taskID)
+        public TracktorWebModel Get([FromQuery]int year, [FromQuery]int month, [FromQuery]int projectID, [FromQuery]int taskID)
         {
-            var summaryModel = await _service.GetSummaryModelAsync(Context);
+            var summaryModel = _service.GetSummaryModel(Context);
             var startDate = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local);
             var endDate = startDate.AddMonths(1);
-            var reportModel = await _service.GetReportModelAsync(Context, startDate, endDate, projectID, taskID);
+            var reportModel = _service.GetReportModel(Context, startDate, endDate, projectID, taskID);
             var webReport = WebReportModel.Create(summaryModel, startDate);
 
             var reportStart = startDate.StartOfWeek(DayOfWeek.Monday);
@@ -89,10 +90,16 @@ namespace tracktor.app.Controllers
                     {
                         taskContrib.Contrib = reportModel.TaskContribs[task.TTaskID];
                     }
-                    projectContrib.TaskContribs.Add(taskContrib);
-                    projectContrib.Contrib += taskContrib.Contrib;
+                    if (taskContrib.Contrib != 0)
+                    {
+                        projectContrib.TaskContribs.Add(taskContrib);
+                        projectContrib.Contrib += taskContrib.Contrib;
+                    }
                 }
-                webReport.ProjectContribs.Add(projectContrib);
+                if (projectContrib.Contrib != 0)
+                {
+                    webReport.ProjectContribs.Add(projectContrib);
+                }
             }
 
             return new TracktorWebModel

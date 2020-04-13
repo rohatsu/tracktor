@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -27,25 +28,25 @@ namespace tracktor.app.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<TracktorWebModel> Update([FromBody]TEntryDto entry)
+        public TracktorWebModel Update([FromBody]TEntryDto entry)
         {
             return new TracktorWebModel
             {
                 EditModel = new TEditModelDto
                 {
-                    Entry = await _service.UpdateEntryAsync(Context, entry)
+                    Entry = _service.UpdateEntry(Context, entry)
                 }
             };
         }
 
         [HttpGet("{entryID}")]
-        public async Task<TracktorWebModel> Get([FromRoute]int entryID)
+        public TracktorWebModel Get([FromRoute]int entryID)
         {
             return new TracktorWebModel
             {
                 EditModel = new TEditModelDto
                 {
-                    Entry = await _service.GetEntryAsync(Context, entryID)
+                    Entry = _service.GetEntry(Context, entryID)
                 }
             };
         }

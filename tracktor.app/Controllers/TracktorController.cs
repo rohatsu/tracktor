@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -27,7 +28,7 @@ namespace tracktor.app.Controllers
         }
 
         [HttpGet("viewmodel")]
-        public Task<TracktorWebModel> GetViewModel(bool updateOnly = false)
+        public TracktorWebModel GetViewModel(bool updateOnly = false)
         {
             return GenerateWebModel(updateOnly);
         }

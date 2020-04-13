@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -33,7 +34,7 @@ namespace tracktor.app.Controllers
         {
             try
             {
-                var entries = _service.GetEntriesModelAsync(GetContext(Request.HttpContext), null, null, 0, 0, 99999).Result;
+                var entries = _service.GetEntriesModel(GetContext(Request.HttpContext), null, null, 0, 0, 99999);
 
                 var csvFile = new StringBuilder();
                 csvFile.AppendLine("Start,End,Month,Project,Task,Hours,InProgress");

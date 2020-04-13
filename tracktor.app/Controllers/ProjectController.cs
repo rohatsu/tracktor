@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using tracktor.app;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -28,9 +29,9 @@ namespace tracktor.app.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<TProjectDto> Update([FromBody]TProjectDto project)
+        public TProjectDto Update([FromBody]TProjectDto project)
         {
-            return await _service.UpdateProjectAsync(Context, project);
+            return _service.UpdateProject(Context, project);
         }
     }
 }

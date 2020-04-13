@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using tracktor.app;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -28,17 +29,17 @@ namespace tracktor.app.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<TracktorWebModel> Update([FromBody]LoginDTO login)
+        public TracktorWebModel Update([FromBody]LoginDTO login)
         {
             var userId = _userManager.GetUserId(Request.HttpContext.User);
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
             if (user != null && login != null)
             {
                 user.TimeZone = login.timeZone;
-                await _userManager.UpdateAsync(user);
+                _userManager.UpdateAsync(user).Wait();
             }
 
-            return await GenerateWebModel();
+            return GenerateWebModel();
         }
     }
 }

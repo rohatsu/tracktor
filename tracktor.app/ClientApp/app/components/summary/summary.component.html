@@ -16,6 +16,17 @@
             </tr>
         </thead>
         <tbody>
+            <tr class="" style="background-color: #dff0d8; color: #444; border-bottom: 2px solid #aaa;">
+                <th>TOTAL</th>
+                <th>&nbsp;</th>
+                <th class="center">&nbsp;</th>
+                <th class="contrib">{{totalContrib().today | timeSpan }}</th>
+                <th class="contrib">{{totalContrib().thisWeek | timeSpan }}</th>
+                <th class="contrib">{{totalContrib().thisMonth | timeSpan }}</th>
+                <th class="center">&nbsp;</th>
+            </tr>
+        </tbody>
+        <tbody>
             <ng-template ngFor let-project [ngForOf]="appService.summaryModel.projects">
                 <tr class="active" [ngClass]="{ 'obsoletep' : project.isObsolete }">
                     <td>
@@ -63,17 +74,6 @@
                     </tr>
                 </ng-template>
             </ng-template>
-        </tbody>
-        <tbody>
-            <tr class="emphasis active">
-                <th>TOTAL</th>
-                <th>&nbsp;</th>
-                <th class="center">&nbsp;</th>
-                <th class="contrib">{{totalContrib().today | timeSpan }}</th>
-                <th class="contrib">{{totalContrib().thisWeek | timeSpan }}</th>
-                <th class="contrib">{{totalContrib().thisMonth | timeSpan }}</th>
-                <th class="center">&nbsp;</th>
-            </tr>
         </tbody>
     </table>
 </div>

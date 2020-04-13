@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -59,14 +60,14 @@ namespace tracktor.app.Controllers
             }
         }
 
-        protected async Task<TracktorWebModel> GenerateWebModel(bool updateOnly = false)
+        protected TracktorWebModel GenerateWebModel(bool updateOnly = false)
         {
-            var summaryModel = await _service.GetSummaryModelAsync(Context);
+            var summaryModel = _service.GetSummaryModel(Context);
             return new TracktorWebModel
             {
                 SummaryModel = summaryModel,
-                EntriesModel = await _service.GetEntriesModelAsync(Context, null, null, 0, 0, 20),
-                StatusModel = await _service.GetStatusModelAsync(Context),
+                EntriesModel = _service.GetEntriesModel(Context, null, null, 0, 0, 50),
+                StatusModel = _service.GetStatusModel(Context),
                 EditModel = updateOnly ? null : new TEditModelDto
                 {
                     Entry = new TEntryDto

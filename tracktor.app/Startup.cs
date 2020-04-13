@@ -13,17 +13,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
-using System.ServiceModel;
-using Microsoft.IdentityModel.Protocols;
-using System.ServiceModel.Description;
-using System.ServiceModel.Channels;
 using tracktor.app.Helpers;
+using tracktor.service;
+using tracktor.model.DAL;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace tracktor.app
 {
     public class Startup
     {
-        private IHostingEnvironment _env;
+        private IWebHostEnvironment _env;
 
         public Startup(IConfiguration configuration)
         {
@@ -82,9 +82,10 @@ namespace tracktor.app
 
             services.AddMvc(options =>
             {
+                options.EnableEndpointRouting = false;
                 options.Filters.AddService(typeof(AngularAntiforgeryCookieResultFilter));
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
+            }).AddNewtonsoftJson();
 
             services.Configure<SecurityStampValidatorOptions>(o =>
             {
@@ -101,48 +102,20 @@ namespace tracktor.app
                 Configuration["Tracktor:SmtpUsername"],
                 Configuration["Tracktor:SmtpPassword"]));
 
-            services.AddSingleton(CreateServiceClient());
-
+            services.AddScoped<ITracktorContext>(sp => new TracktorContext(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ITracktorService, TracktorService>();
+            services.AddSingleton(log4net.LogManager.GetLogger(GetType()));
+            services.AddSingleton<IMapper>(TracktorStartup.AppInitialize());
             services.AddSingleton(Configuration);
-
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
         }
 
-        private ITracktorService CreateServiceClient()
-        {
-            var uri = new Uri(Configuration["Tracktor:ServiceUrl"]);
-            HttpBindingBase httpBinding;
-
-            if (uri.Scheme == "http")
-            {
-                var binding = new BasicHttpBinding();
-                binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
-                httpBinding = binding;
-            }
-            else
-            {
-                var binding = new BasicHttpsBinding(BasicHttpsSecurityMode.Transport);
-                binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
-                httpBinding = binding;
-            }
-            var identity = new DnsEndpointIdentity("");
-            var address = new EndpointAddress(uri, identity, new AddressHeader[0]);
-            var factory = new ChannelFactory<ITracktorService>(httpBinding, address);
-            ClientCredentials loginCredentials = new ClientCredentials();
-            loginCredentials.UserName.UserName = "tracktor";
-            loginCredentials.UserName.Password = Configuration["Tracktor:ServicePassword"];
-            var defaultCredentials = factory.Endpoint.EndpointBehaviors.OfType<ClientCredentials>().First();
-            factory.Endpoint.EndpointBehaviors.Remove(defaultCredentials);
-            factory.Endpoint.EndpointBehaviors.Add(loginCredentials);
-            return factory.CreateChannel();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             _env = env;
 
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
@@ -158,6 +131,8 @@ namespace tracktor.app
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            loggerFactory.AddLog4Net();
 
             app.UseMvc(routes =>
             {
@@ -180,7 +155,7 @@ namespace tracktor.app
                 var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
                 // drop test db
-                if (_env.IsEnvironment("Test"))
+                if (_env.EnvironmentName == "Test")
                 {
                     await dbContext.Database.EnsureDeletedAsync();
                 }

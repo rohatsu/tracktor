@@ -12,10 +12,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app
 {
     [Produces("application/json")]
+    [Consumes("application/json")]
     [Route("api/account")]
     public class AccountController : Controller
     {
@@ -104,7 +106,7 @@ namespace tracktor.app
                 _logger.LogInformation(3, $"User {dto.Username} created a new account with a password");
 
                 // create user in tracktor
-                user.TUserID = await _client.CreateUserAsync(user.Id);
+                user.TUserID = _client.CreateUser(user.Id);
                 user.TimeZone = dto.timezone;
                 await _userManager.UpdateAsync(user);
 

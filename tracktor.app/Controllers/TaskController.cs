@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using tracktor.app;
 using tracktor.app.Models;
+using tracktor.service;
 
 namespace tracktor.app.Controllers
 {
@@ -34,30 +35,30 @@ namespace tracktor.app.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<TTaskDto> Update([FromBody]TTaskDto task)
+        public TTaskDto Update([FromBody]TTaskDto task)
         {
-            return await _service.UpdateTaskAsync(Context, task);
+            return _service.UpdateTask(Context, task);
         }
 
         [HttpPost("stop")]
-        public async Task<TracktorWebModel> Stop([FromBody]TracktorEntryAction actionModel)
+        public TracktorWebModel Stop([FromBody]TracktorEntryAction actionModel)
         {
-            await _service.StopTaskAsync(Context, actionModel.currentTaskID);
-            return await GenerateWebModel(true);
+            _service.StopTask(Context, actionModel.currentTaskID);
+            return GenerateWebModel(true);
         }
 
         [HttpPost("start")]
-        public async Task<TracktorWebModel> Start([FromBody]TracktorEntryAction actionModel)
+        public TracktorWebModel Start([FromBody]TracktorEntryAction actionModel)
         {
-            await _service.StartTaskAsync(Context, actionModel.newTaskID);
-            return await GenerateWebModel(true);
+            _service.StartTask(Context, actionModel.newTaskID);
+            return GenerateWebModel(true);
         }
 
         [HttpPost("switch")]
-        public async Task<TracktorWebModel> Switch([FromBody]TracktorEntryAction actionModel)
+        public TracktorWebModel Switch([FromBody]TracktorEntryAction actionModel)
         {
-            await _service.SwitchTaskAsync(Context, actionModel.currentTaskID, actionModel.newTaskID);
-            return await GenerateWebModel(true);
+            _service.SwitchTask(Context, actionModel.currentTaskID, actionModel.newTaskID);
+            return GenerateWebModel(true);
         }
     }
 }
