@@ -81,6 +81,7 @@ namespace tracktor.app.Controllers
                         TTaskID = 0,
                         TEntryID = 0,
                         Contrib = 0,
+                        TProjectID = 0
                     }
                 },
                 ReportModel = updateOnly ? null : WebReportModel.Create(summaryModel, DateTime.UtcNow)

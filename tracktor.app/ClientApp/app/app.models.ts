@@ -43,6 +43,7 @@ export class EntryModel {
     public startDate: string;
     public tEntryID: number;
     public tTaskID: number;
+    public tProjectID: number;
     public taskName: string;
 }
 

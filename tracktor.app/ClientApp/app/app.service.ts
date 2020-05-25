@@ -210,8 +210,8 @@ export class AppService {
         });
     }
 
-    public saveEntry(tEntryID: number, startDate: string, endDate: string, isDeleted: boolean) {
-        this.apiPost('entry/update', { TEntryID: tEntryID, StartDate: startDate, EndDate: endDate, IsDeleted: isDeleted }, this.loadModel);
+    public saveEntry(tEntryID: number, startDate: string, endDate: string, taskId: number, isDeleted: boolean) {
+        this.apiPost('entry/update', { TEntryID: tEntryID, StartDate: startDate, EndDate: endDate, IsDeleted: isDeleted, TTaskId: taskId }, this.loadModel);
     }
 
     public saveUser(timeZone: string) {

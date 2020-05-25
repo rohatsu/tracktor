@@ -128,3 +128,8 @@ tracktor-app:empty + .loading {
     opacity: 1;
     z-index: 100;
 }
+
+tr.dualborder > td {
+    border-bottom: 2px solid #ddd !important;
+    border-top: 2px solid #ddd !important;
+}

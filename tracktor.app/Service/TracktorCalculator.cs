@@ -130,7 +130,8 @@ namespace tracktor.service
                         ProjectName = "",
                         TaskName = "",
                         TEntryID = 0,
-                        TTaskID = 0
+                        TTaskID = 0,
+                        TProjectID = 0
                     };
                 }
                 dto = Mapper.Map<TEntryDto>(entry);
@@ -141,6 +142,8 @@ namespace tracktor.service
             }
             dto.StartDate = ToLocal(entry.StartDate).Value;
             dto.EndDate = ToLocal(entry.EndDate);
+            dto.TTaskID = entry.TTaskID;
+            dto.TProjectID = entry.TTask.TProjectID;
             if (string.IsNullOrWhiteSpace(dto.TaskName))
             {
                 dto.TaskName = entry.TTask.Name;

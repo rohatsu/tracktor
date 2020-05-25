@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="" style="background-color: #dff0d8; color: #444; border-bottom: 2px solid #aaa;">
+            <tr class="" style="background-color: #dff0d8; color: #444; border-bottom: 2px solid #ddd;">
                 <th>TOTAL</th>
                 <th>&nbsp;</th>
                 <th class="center">&nbsp;</th>
@@ -25,10 +25,19 @@
                 <th class="contrib">{{totalContrib().thisMonth | timeSpan }}</th>
                 <th class="center">&nbsp;</th>
             </tr>
+            <tr style="background-color: #fbfbfb;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
         </tbody>
         <tbody>
             <ng-template ngFor let-project [ngForOf]="appService.summaryModel.projects">
-                <tr class="active" [ngClass]="{ 'obsoletep' : project.isObsolete }">
+                <tr class="active" [ngClass]="{ 'obsoletep' : project.isObsolete, 'dualborder' : !project.isObsolete }">
                     <td>
                         <span>{{project.name}}</span>
                     </td>
@@ -73,6 +82,15 @@
                         </td>
                     </tr>
                 </ng-template>
+                <tr style="background-color: #fbfbfb;" [ngClass]="{ 'invisible' : project.isObsolete }">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </ng-template>
         </tbody>
     </table>

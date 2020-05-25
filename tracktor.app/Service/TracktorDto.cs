@@ -87,6 +87,8 @@ namespace tracktor.service
         [DataMember]
         public int TTaskID { get; set; }
         [DataMember]
+        public int TProjectID { get; set; }
+        [DataMember]
         public double Contrib { get; set; }
         [DataMember]
         public bool IsDeleted { get; set; }

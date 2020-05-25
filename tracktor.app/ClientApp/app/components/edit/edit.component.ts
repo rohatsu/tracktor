@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { AppService } from '../../app.service';
 import $ = require('jquery');
 import * as moment from 'moment';
+import { TaskModel } from '../../app.models';
 
 @Component({
     selector: '[tracktor-edit]',
@@ -21,6 +22,8 @@ export class EditComponent implements OnInit, AfterViewChecked {
         useCurrent: false
     };
 
+    public tasks: TaskModel[];
+    public taskId: number;
     public startDate: moment.Moment;
     public endDate: moment.Moment;
 
@@ -46,6 +49,16 @@ export class EditComponent implements OnInit, AfterViewChecked {
         if (this.appService.editModel) {
             this.startDate = moment(this.appService.editModel.entry.startDate);
             this.endDate = moment(this.appService.editModel.entry.endDate);
+            this.taskId = this.appService.editModel.entry.tTaskID;
+
+            // lookup project tasks
+            if (this.appService.editModel !== undefined && this.appService.summaryModel !== undefined) {
+                const editProjectId = this.appService.editModel.entry.tProjectID;
+                const foundProject = this.appService.summaryModel.projects.find(p => p.tProjectID === editProjectId);
+                if (foundProject !== undefined) {
+                    this.tasks = foundProject.tTasks;
+                }
+            }
         }
     }
 
@@ -60,14 +73,14 @@ export class EditComponent implements OnInit, AfterViewChecked {
 
     public save() {
         if (this.appService.editModel) {
-            this.appService.saveEntry(this.appService.editModel.entry.tEntryID, this.appService.editModel.entry.startDate, this.appService.editModel.entry.endDate, false);
+            this.appService.saveEntry(this.appService.editModel.entry.tEntryID, this.appService.editModel.entry.startDate, this.appService.editModel.entry.endDate, this.taskId, false);
             this.close();
         }
     }
 
     public delete() {
         if (this.appService.editModel) {
-            this.appService.saveEntry(this.appService.editModel.entry.tEntryID, this.appService.editModel.entry.startDate, this.appService.editModel.entry.endDate, true);
+            this.appService.saveEntry(this.appService.editModel.entry.tEntryID, this.appService.editModel.entry.startDate, this.appService.editModel.entry.endDate, this.taskId, true);
             this.close();
         }
     }

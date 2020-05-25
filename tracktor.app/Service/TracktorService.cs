@@ -277,6 +277,7 @@ namespace tracktor.service
                                 {
                                     existingEntry.StartDate = startUtc;
                                     existingEntry.EndDate = endUtc;
+                                    existingEntry.TTaskID = entry.TTaskID;
                                     _db.SaveChanges();
                                 }
                             }
