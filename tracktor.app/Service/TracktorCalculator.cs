@@ -69,7 +69,7 @@ namespace tracktor.service
             }
             DateTime? utcStart = ToUtc(startDate);
             DateTime? utcEnd = ToUtc(endDate);
-            return _db.TEntries.AsNoTracking().Where(e => (e.TTask.TProjectID == projectID || projectID == 0) && e.TTask.TProject.TUserID == mContext.TUserID &&
+            return _db.TEntries.Include("TTask").AsNoTracking().Where(e => (e.TTask.TProjectID == projectID || projectID == 0) && e.TTask.TProject.TUserID == mContext.TUserID &&
                 (taskID ==0 || e.TTaskID == taskID))
                 .Where(e => !(utcStart.HasValue && e.EndDate.HasValue && e.EndDate < utcStart)
                             && !(e.StartDate > utcEnd))
@@ -180,7 +180,7 @@ namespace tracktor.service
 
             var model = new TSummaryModelDto
             {
-                Projects = _db.TProjects.Where(p => p.TUserID == mContext.TUserID).OrderBy(p => p.IsObsolete).ThenBy(p => p.DisplayOrder).ThenBy(p => p.Name).ToList().Select(p => Mapper.Map<TProjectDto>(p)).ToList()
+                Projects = _db.TProjects.Include("TTasks").Where(p => p.TUserID == mContext.TUserID).OrderBy(p => p.IsObsolete).ThenBy(p => p.DisplayOrder).ThenBy(p => p.Name).ToList().Select(p => Mapper.Map<TProjectDto>(p)).ToList()
             };
             foreach(var p in model.Projects)
             {

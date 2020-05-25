@@ -63,10 +63,11 @@ namespace tracktor.app.Controllers
         protected TracktorWebModel GenerateWebModel(bool updateOnly = false)
         {
             var summaryModel = _service.GetSummaryModel(Context);
+            var lookback = DateTime.Today.AddMonths(-1);
             return new TracktorWebModel
             {
                 SummaryModel = summaryModel,
-                EntriesModel = _service.GetEntriesModel(Context, null, null, 0, 0, 50),
+                EntriesModel = _service.GetEntriesModel(Context, new DateTime(lookback.Year, lookback.Month, 1).AddDays(-1).ToLocalTime(), null, 0, 0, 999),
                 StatusModel = _service.GetStatusModel(Context),
                 EditModel = updateOnly ? null : new TEditModelDto
                 {

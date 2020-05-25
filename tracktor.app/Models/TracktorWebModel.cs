@@ -73,7 +73,7 @@ namespace tracktor.app.Models
             return new WebReportModel()
             {
                 Projects = projects,
-                Tasks = tasks,
+                Tasks = tasks.OrderBy(t => t.Value).ToList(),
                 Years = Enumerable.Range(2013, DateTime.Today.Year - 2012).ToList(),
                 Months = Enumerable.Range(1, 12).ToList(),
                 Report = new List<WebReportWeek>(),
